@@ -1,27 +1,31 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: api-deployment
+  name: notes-api-deployment
 spec:
   replicas: 3
   selector:
     matchLabels:
-      component: api
+      component: notes-api
   template:
     metadata:
       labels:
-        component: api
+        component: notes-api
     spec:
       containers:
-        - name: api
+        - name: notes-api
           image: fhsinchy/notes-api
+          resources:
+            limits:
+              memory: "64Mi"
+              cpu: "125m"
           ports:
             - containerPort: 3000
           env:
             - name: DB_CONNECTION
               value: pg
             - name: DB_HOST
-              value: postgres-cluster-ip-service
+              value: notes-database-service
             - name: DB_PORT
               value: "5432"
             - name: DB_USER
@@ -29,7 +33,4 @@ spec:
             - name: DB_DATABASE
               value: notesdb
             - name: DB_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: postgres-secret
-                  key: password
+              value: 63eaQB9wtLqmNBpg
